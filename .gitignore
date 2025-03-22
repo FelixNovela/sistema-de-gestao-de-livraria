@@ -1,0 +1,11 @@
+# Ignorar arquivos compilados
+/bin/
+
+# Ignorar configurações do Eclipse
+.classpath
+.project
+.settings/
+
+# Ignorar outros arquivos desnecessários
+*.log
+*.tmp
