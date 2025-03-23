@@ -13,8 +13,9 @@ public class LivrosView {
 		System.out.println("2. Listar Livros        |");
 		System.out.println("3. Atualizar Quantidade |");
 		System.out.println("4. Remover Livro        |");
-		System.out.println("5. Voltar               |");
-		System.out.println("6. Sair                 |");
+		System.out.println("5. Pesquisar Livro      |");
+		System.out.println("6. Voltar               |");
+		System.out.println("7. Sair                 |");
 		System.out.println("------------------------|");
 		System.out.print("Escolha uma opcao:");
 		
@@ -24,6 +25,7 @@ public class LivrosView {
 		for(Livro lista : livros) {
 			if(lista.isAtivo() == true) {
 				System.out.println(lista);
+				System.out.println();
 			}
 			
 		}

@@ -7,7 +7,7 @@ public class Livro implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private int isbn;
+	private String isbn;
 	private String titulo;
 	private String autor;
 	private LocalDate DateanoPublicacao;
@@ -19,7 +19,7 @@ public class Livro implements Serializable {
 
 	}
 
-	public Livro(int isbn, String titulo, String autor, LocalDate dateanoPublicacao, int estoque) {
+	public Livro(String isbn, String titulo, String autor, LocalDate dateanoPublicacao, int estoque) {
 
 		this.isbn = isbn;
 		this.titulo = titulo;
@@ -30,7 +30,7 @@ public class Livro implements Serializable {
 
 	}
 
-	public int getIsbn() {
+	public String getIsbn() {
 		return isbn;
 	}
 
@@ -79,9 +79,13 @@ public class Livro implements Serializable {
 		return estoque;
 	}
 
-	public void aumentarEstoque(int quantidade) {
+	public boolean aumentarEstoque(int quantidade) {
+		if(quantidade <= 0) {
+			System.out.println("Quantidade deve ser maior que 0");
+			return false; 
+		}
 		this.estoque += quantidade;
-
+		return true; 
 	} 
 
 	public boolean diminuirEstoque() {
@@ -98,7 +102,7 @@ public class Livro implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("ID: " + getIsbn() + " | ");
+		sb.append("ISBN: " + getIsbn() + " | ");
 		sb.append("Titulo: " + getTitulo() + " | ");
 		sb.append("Autor: " + getAutor() + " | ");
 		sb.append("Data de Publicacao: " + getDateanoPublicacao() + " | ");

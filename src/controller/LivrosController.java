@@ -2,7 +2,6 @@ package controller;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Scanner;
 
 import crud.Crud;
@@ -12,9 +11,8 @@ import view.LivrosView;
 
 public class LivrosController {
 	private LivrosView livrosView;
-	private LivrosService validarLivro = new LivrosService();;
+	private LivrosService livroService = new LivrosService();;
 	private MainController mainController;
-	private Crud crud;
 	private static Scanner sc;
 	private static DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	public void gerenciarLivros(Scanner sc) {
@@ -22,12 +20,15 @@ public class LivrosController {
 		int op;
 		
 		do {
-			this.crud = new Crud("livros.dat");
-			List<Livro> lista = crud.listarObj();
+			
+			
+			LivrosService livrosService = new LivrosService();
+			
 			
 			this.livrosView = new LivrosView();
 			livrosView.Menu();
 			op = sc.nextInt();
+			sc.nextLine();
 			switch(op) { 
 			case 1:
 				
@@ -36,9 +37,9 @@ public class LivrosController {
 				System.out.println("ADICIONAR LIVRO");
 				System.out.println();
 				System.out.print("ISBN: ");
-				int isbn = sc.nextInt();
+				String isbn = sc.nextLine();
 				
-				int indice = validarLivro.validarIsbn(isbn, lista);
+				int indice = livroService.verificarIsbn(isbn);
 				
 				if(indice != -1) {
 					
@@ -47,8 +48,7 @@ public class LivrosController {
 					if(resp == 's') {
 						System.out.println("Quantidade: ");
 						int quantidade = sc.nextInt();
-						lista.get(indice).aumentarEstoque(quantidade);
-						crud.atualizar(lista, indice);
+						livrosService.atulizarQuantidadeLivros(isbn, quantidade);
 						break;
 					}else {
 						livrosView.Menu();
@@ -57,35 +57,33 @@ public class LivrosController {
 					
 				}
 				
-				sc.nextLine();
+				
 				
 				System.out.print("Titulo: ");
 				String titulo = sc.nextLine();
 				
-				System.out.print("AUtor: ");
+				System.out.print("AUtor: "); 
 				String autor = sc.nextLine();
 				
-				System.out.print("Data de publicacao: ");
+				System.out.print("Data de publicacao (dd/MM/yyyy): ");
 				LocalDate dateanoPublicacao = LocalDate.parse(sc.nextLine(), df);
 				
+				 
 				System.out.println("Quantidade: ");
 				int quantidade = sc.nextInt();
 				
-				if(validarLivro.validarAdicaoLivro(new Livro(isbn,titulo,autor,dateanoPublicacao,quantidade), this.crud.listarObj())) {
-					this.crud.novoObjecto(new Livro(isbn,titulo,autor,dateanoPublicacao,quantidade));
-				}
-				
+				livroService.adicionarLivro(new Livro(isbn,titulo,autor,dateanoPublicacao,quantidade));
 				
 				System.out.println();
 				System.out.println("_________________________________________________________________________________________________________________________________________");
 				break;
 				
-			case 2:
+			case 2: 
 				System.out.println();
 				System.out.println("_________________________________________________________________________________________________________________________________________");
 				System.out.println("LISTA DE LIVROS");
 				System.out.println();
-				this.livrosView.listarLivros(this.crud.listarObj());
+				livrosView.listarLivros(livrosService.listarLivros());
 				System.out.println();
 				System.out.println("_________________________________________________________________________________________________________________________________________");
 				System.out.println();
@@ -96,16 +94,16 @@ public class LivrosController {
 				System.out.println("_________________________________________________________________________________________________________________________________________");
 				System.out.println("ATUALIZACAO DA QUANTIDADE NO STOCK");
 				System.out.println();
-				System.out.print("ID do livro: ");
-				int idAt = sc.nextInt();
-				System.out.print("Quantidade: ");
-				int quantidadeAt = sc.nextInt();
 				
-				if(validarLivro.validarIsbn(idAt, crud.listarObj()) != -1) {
-					lista = crud.listarObj();
-					lista.get(validarLivro.validarIsbn(idAt, crud.listarObj())).aumentarEstoque(quantidadeAt);
-					crud.atualizar(lista, validarLivro.validarIsbn(idAt, crud.listarObj()));
-				}
+				System.out.print("ISBN do livro: ");
+				isbn = sc.nextLine();
+				
+				System.out.print("Quantidade: ");
+				quantidade = sc.nextInt();
+				
+				livroService.atulizarQuantidadeLivros(isbn, quantidade); 
+					
+				
 				System.out.println();
 				System.out.println("_________________________________________________________________________________________________________________________________________");
 				System.out.println();
@@ -115,32 +113,35 @@ public class LivrosController {
 				System.out.println();
 				System.out.println("_________________________________________________________________________________________________________________________________________");
 				System.out.println();
-				System.out.print("ID do livro: ");
-				int idRm = sc.nextInt();
-				/*indice = validarLivro.validarId(idRm, crud.listarObj());
-				if(indice != -1) {
-					lista = crud.listarObj();
-					lista.get(indice).setAtivo(false);
-					crud.atualizar(lista, indice);
-					
-				}*/
+				
+				System.out.print("ISBN do livro: ");
+				isbn = sc.nextLine();
+				livrosService.removerLivro(isbn); 
+				
 				System.out.println();
 				System.out.println("_________________________________________________________________________________________________________________________________________");
 				System.out.println();
 				break;
 			case 5:
+				System.out.println("Pesquisar");
+				System.out.print("ISBN: ");
+				isbn = sc.nextLine();
+				System.out.println(livrosService.pesquisarLivro(isbn));
+				break;
+			case 6:
 				System.out.println();
 				System.out.println("_________________________________________________________________________________________________________________________________________");
 				System.out.println();
 				this.mainController = new MainController();
 				this.mainController.init();
-				op = 6;
+				 
 				System.out.println();
 				System.out.println("_________________________________________________________________________________________________________________________________________");
 				System.out.println();
 				break;
-			case 6:
+			case 7:
 				System.out.println("Saindo...");
+				op = 6;
 				break;
 			default:
 				System.out.println("Opcao invalida");

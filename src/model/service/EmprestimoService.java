@@ -29,7 +29,7 @@ public class EmprestimoService {
 		
 		for (int i = 0; i < livro.length; i++) {
 			for (int j = 0; j < listaL.size(); j++) {
-				if (livro[i] == listaL.get(j).getIsbn()) {
+				if (String.valueOf(livro[i]) == listaL.get(j).getIsbn()) {
 					System.out.println("Livros emprestados");
 					listaL.get(j).diminuirEstoque();
 					crudLivros.atualizar(listaL, j);

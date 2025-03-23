@@ -1,12 +1,4 @@
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 import controller.MainController;
-import crud.CRUDLivros;
-import model.entities.Cliente;
-import model.entities.Emprestimo;
-import model.entities.Livro;
 
 public class Program {
 
